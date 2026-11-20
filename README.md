@@ -20,7 +20,7 @@ Transactional system for managing electronic component inventory, technical data
 You need **two terminals** open inside the project folder (`PROYECTO_LAB`).
 
 ### Step 1: Start the MySQL Database (Docker)
-In **Terminal 1**, start the MySQL 8 container (automatically creates `laboratory_db` and loads `schema_mysql.sql` on first run):
+In **Terminal 1**, start the MySQL 8 container (automatically creates the target database and loads `schema_mysql.sql` on first run):
 ```bash
 docker compose up -d
 ```
@@ -39,8 +39,10 @@ pip install -r requirements.txt
 ```
 
 ### Step 3: Start the Backend API (Terminal 1)
-With `venv` active in **Terminal 1**, start Flask on port `5000`:
+With `venv` active in **Terminal 1**, configure your database connection via environment variable (`DATABASE_URL`) if needed and start Flask on port `5000`:
 ```bash
+# Optional: set your own connection string instead of hardcoding credentials
+# export DATABASE_URL="mysql+pymysql://<db_user>:<your_db_password>@127.0.0.1:3306/<db_name>"
 python app.py
 ```
 > Keep this terminal open. The API listens at `[http://127.0.0.1:5000/api](http://127.0.0.1:5000/api)` (main routes: `/inventario`, `/usuarios`, `/proyectos`, `/solicitudes`).
@@ -56,7 +58,7 @@ streamlit run gui.py
 ### Step 5: Open the Web Page in Your Browser
 Once Streamlit starts, open either URL in your browser (Streamlit usually opens it automatically):
 * **Local URL:** `http://localhost:8501` (or `[http://127.0.0.1:8501](http://127.0.0.1:8501)`)
-* **Network / LAN URL:** Check the `Network URL` printed in Terminal 2 (e.g., `[http://192.168.](http://192.168.)x.x:8501`) to access it from another device on the same network.
+* **Network / LAN URL:** Check the `Network URL` printed in Terminal 2 (e.g., `[http://192.168.](http://192.168.)x.x:8501`) to open it from another device on the same network.
 
 ---
 
@@ -69,14 +71,14 @@ Once Streamlit starts, open either URL in your browser (Streamlit usually opens 
 
 ---
 
-## 🗄️ Default Database Configuration
+## 🔐 Database Configuration (Without Hardcoding Secrets)
 
-| Parameter | Value |
+| Parameter | Value / Placeholder |
 | :--- | :--- |
 | **Host / Port** | `127.0.0.1:3306` |
-| **Database** | `laboratory_db` |
-| **User** | `lab_user` |
-| **Password** | `lab_password` |
+| **Database** | `<db_name>` (e.g., `laboratory_db`) |
+| **User** | `<db_user>` |
+| **Password** | Set locally via environment variables or `.env` (never commit real passwords) |
 
 ---
 
@@ -88,4 +90,4 @@ Once Streamlit starts, open either URL in your browser (Streamlit usually opens 
    docker compose stop
    ```
 
-> **Note:** Avoid running `docker compose down -v` unless you intentionally want to wipe the `mysql_data` volume.
+> **Note:** Avoid running `docker compose down -v` unless you intentionally want to wipe the persisted database volume.
