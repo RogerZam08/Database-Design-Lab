@@ -1,4 +1,6 @@
 venv/
 __pycache__/
 *.pyc
+instance/
+avance_proyecto.zip
 .DS_Store
